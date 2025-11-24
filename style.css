@@ -1,47 +1,62 @@
 :root {
-    --primary-color: #4a90e2;
-    --secondary-color: #f5f6fa;
-    --text-color: #2d3436;
-    --sidebar-width: 250px;
+    --primary-color: #FF9900; /* Violet doux et créatif */
+    --primary-hover: #5649c0;
+    --secondary-color: #fdfbf7; /* Blanc cassé chaleureux */
+    --text-color: #2d3436; /* Gris anthracite doux */
+    --text-muted: #636e72;
+    --sidebar-width: 260px;
+    --sidebar-bg: #ffffff; /* Sidebar claire */
     --card-bg: #ffffff;
     --success-color: #00b894;
     --warning-color: #fdcb6e;
     --danger-color: #ff7675;
+    --border-radius: 24px; /* Formes organiques */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.12);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Nunito', 'Quicksand', 'Segoe UI', sans-serif;
 }
 
 body {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
+    background-color: black;
+    color: #FF9900 ;
     display: flex;
     height: 100vh;
     overflow: hidden;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
 /* Barre latérale */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: white;
-    border-right: 1px solid #e1e1e1;
+    background-color: #FF9900;
+    border-right: 1px solid rgba(0,0,0,0.05); /* Bordure subtile */
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 24px;
+    color: var(--text-color);
 }
 
 .logo {
     font-size: 24px;
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: 40px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 48px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    padding: 0 12px;
+}
+
+.logo i {
+    color: white);
 }
 
 .nav-links {
@@ -49,23 +64,31 @@ body {
 }
 
 .nav-links li {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #636e72;
-    padding: 12px 15px;
-    border-radius: 8px;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
 }
 
-.nav-links a:hover, .nav-links a.active {
+.nav-links a:hover {
+    background-color: #f0f2f5;
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.nav-links a.active {
     background-color: var(--primary-color);
     color: white;
+    box-shadow: 0 8px 20px -4px rgba(108, 92, 231, 0.4);
 }
 
 /* Contenu principal */
@@ -223,12 +246,12 @@ header {
 
 .kanban-column {
     min-width: 300px;
-    background: #dfe6e9;
     border-radius: 8px;
     padding: 15px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background-color: #dbdbdb;
 }
 
 .kanban-header {
@@ -258,3 +281,4 @@ header {
     font-size: 11px;
     margin-top: 10px;
 }
+/*Code couleur by Devrim*/
