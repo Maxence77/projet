@@ -3,31 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Projet</title>
+    <title>Bienvenue - Gestion de Projet</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Gestionnaire de Projets</h1>
-
-    <form id="project-form">
-        <input type="text" id="title" placeholder="Titre du projet" required>
-        <textarea id="description" placeholder="Description"></textarea>
-        <select id="status">
-            <option value="pending">En attente</option>
-            <option value="in_progress">En cours</option>
-            <option value="completed">Terminé</option>
-        </select>
-        <button type="submit">Ajouter le projet</button>
-    </form>
-
-    <h2>Liste des projets</h2>
-    <ul id="project-list">
-        <!-- Les projets seront chargés ici par JS -->
-    </ul>
+<div class="container" style="text-align: center;">
+    <h1>Bienvenue sur votre Gestionnaire de Projets</h1>
+    <p>Organisez vos tâches, suivez vos progrès et atteignez vos objectifs.</p>
+    
+    <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+        <a href="login.html" style="text-decoration: none;">
+            <button>Se connecter</button>
+        </a>
+        <a href="register.html" style="text-decoration: none;">
+            <button style="background: linear-gradient(to right, #4facfe, #00f2fe);">S'inscrire</button>
+        </a>
+    </div>
 </div>
 
-<script src="js/script.js"></script>
 </body>
 </html>

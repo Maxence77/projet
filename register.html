@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Gestion de Projet</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container login-container">
+    <h1>Inscription</h1>
+    <form id="register-form">
+        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button type="submit">S'inscrire</button>
+    </form>
+    <p id="error-msg" style="color: red; text-align: center; display: none;"></p>
+    <p style="text-align: center; margin-top: 10px;">
+        Déjà un compte ? <a href="login.html">Se connecter</a>
+    </p>
+</div>
+
+<script>
+    document.getElementById('register-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('error-msg');
+
+        try {
+            const res = await fetch('php/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'register', username, password })
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+                window.location.href = 'login.html';
+            } else {
+                errorMsg.textContent = data.message || 'Erreur lors de l\'inscription';
+                errorMsg.style.display = 'block';
+            }
+        } catch (err) {
+            console.error(err);
+            errorMsg.textContent = 'Erreur de connexion au serveur';
+            errorMsg.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>

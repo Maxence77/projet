@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Gestion de Projet</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container login-container">
+    <h1>Connexion</h1>
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button type="submit">Se connecter</button>
+    </form>
+    <p id="error-msg" style="color: red; text-align: center; display: none;">Identifiants incorrects</p>
+    <p style="text-align: center; margin-top: 10px;">
+        Pas de compte ? <a href="register.html">S'inscrire</a>
+    </p>
+</div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('error-msg');
+
+        try {
+            const res = await fetch('php/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'login', username, password })
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                window.location.href = 'dashboard.html';
+            } else {
+                errorMsg.textContent = data.message || 'Identifiants incorrects';
+                errorMsg.style.display = 'block';
+            }
+        } catch (err) {
+            console.error(err);
+            errorMsg.textContent = 'Erreur de connexion au serveur';
+            errorMsg.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
