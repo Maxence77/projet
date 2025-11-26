@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Projet</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Gestionnaire de Projets</h1>
+
+    <form id="project-form">
+        <input type="text" id="title" placeholder="Titre du projet" required>
+        <textarea id="description" placeholder="Description"></textarea>
+        <select id="status">
+            <option value="pending">En attente</option>
+            <option value="in_progress">En cours</option>
+            <option value="completed">Terminé</option>
+        </select>
+        <button type="submit">Ajouter le projet</button>
+    </form>
+
+    <h2>Liste des projets</h2>
+    <ul id="project-list">
+        <!-- Les projets seront chargés ici par JS -->
+    </ul>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
