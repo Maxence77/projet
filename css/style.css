@@ -2,29 +2,30 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #000000;
     margin: 0;
     padding: 0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center; /* Center vertically */
-    color: #333;
+    align-items: center;
+    color: #ffffff;
 }
 
 .container {
     width: 100%;
     max-width: 800px;
-    background: rgba(255, 255, 255, 0.95);
+    background: #1b1b1b;
     padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     margin: 20px;
+    border: 1px solid #333;
 }
 
 h1, h2 {
     text-align: center;
-    color: #2d3748;
+    color: #ffffff;
     margin-bottom: 20px;
 }
 
@@ -37,30 +38,34 @@ form {
 
 input, textarea, select, button {
     padding: 12px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    border: 2px solid #333;
+    border-radius: 4px;
     font-family: inherit;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    background-color: #000;
+    color: #fff;
 }
 
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #ffa31a;
 }
 
 button {
-    background: linear-gradient(to right, #667eea, #764ba2);
-    color: white;
+    background: #ffa31a;
+    color: #000000;
     cursor: pointer;
     border: none;
     font-weight: 600;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s;
+    text-transform: uppercase;
 }
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 163, 26, 0.4);
+    background: #ff9900;
 }
 
 ul {
@@ -71,36 +76,42 @@ ul {
 }
 
 li {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    background: #2b2b2b;
+    border: 1px solid #333;
+    border-radius: 4px;
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: #fff;
 }
 
 li:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    border-color: #ffa31a;
 }
 
 li:last-child {
-    border-bottom: 1px solid #e2e8f0; /* Reset from previous style */
+    border-bottom: 1px solid #333;
 }
 
 .delete-btn {
-    background: #fc8181;
+    background: #333;
+    color: #fff;
     padding: 8px 12px;
     margin-left: 15px;
     font-size: 0.9rem;
-    width: auto; /* Prevent full width if button style overrides */
+    width: auto;
+    border: 1px solid #444;
 }
 
 .delete-btn:hover {
-    background: #f56565;
-    box-shadow: 0 4px 12px rgba(252, 129, 129, 0.4);
+    background: #cc0000;
+    color: white;
+    box-shadow: 0 4px 12px rgba(204, 0, 0, 0.4);
+    border-color: #cc0000;
 }
 
 /* Login specific styles */
@@ -110,16 +121,17 @@ li:last-child {
 }
 
 .logout-btn {
-    background: #cbd5e0;
-    color: #4a5568;
+    background: #333;
+    color: #fff;
     margin-bottom: 20px;
     width: auto;
     display: inline-block;
 }
 
 .logout-btn:hover {
-    background: #a0aec0;
+    background: #555;
     box-shadow: none;
     transform: none;
+    color: #ffa31a;
 }
 
