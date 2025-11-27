@@ -1,5 +1,4 @@
-# Nom du workflow qui apparaîtra dans l'onglet Actions
-name: "CodeQL Analysis"
+name: "CodeQL Simple Analysis"
 
 on:
   push:
@@ -18,44 +17,37 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     
-    strategy:
-      fail-fast: false
-      matrix:
-        # Format de liste le plus simple et le plus fiable pour les langages.
-        language: [ javascript, php ]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    # 1. Initialiser l'Action CodeQL (PASSAGE À V4)
+    # 1. Initialiser l'Action CodeQL
+    # Nous initialisons TOUS les langages en une seule fois pour contourner l'erreur de matrice.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
-        languages: ${{ matrix.language }}
+        languages: 'javascript, php' 
         queries: security-and-quality
 
-    # 2. Installation des Dépendances (Facultative)
-    - if: ${{ matrix.language == 'php' }}
-      name: Install PHP dependencies (Composer)
+    # 2. Installation des Dépendances (Facultative - utilise IF simple sans matrice)
+    - name: Install PHP dependencies (Composer)
       run: |
+        # Cette étape s'exécute, mais le "|| exit 0" la rend facultative
         composer install --no-dev --prefer-dist || exit 0
         
-    - if: ${{ matrix.language == 'javascript' }}
-      name: Install JS dependencies (npm/yarn)
+    - name: Install JS dependencies (npm/yarn)
       run: |
         npm install || exit 0
 
-    # 3. Étape de Construction (Correction pour JS/HTML - utilise find/cat pour forcer l'indexation)
-    - if: ${{ matrix.language == 'javascript' }}
-      name: Build JavaScript for CodeQL (Force indexing)
+    # 3. Étape de Construction (Correction pour JS/HTML)
+    - name: Build JavaScript for CodeQL (Force indexing)
       run: |
         echo "Forcing CodeQL to see JS/HTML files"
-        # Utiliser une commande simple de liste qui touche tous les fichiers JS/HTML
+        # Commande pour lister les fichiers et forcer l'indexation par l'action CodeQL
         find . -name "*.js" -print -o -name "*.html" -print | xargs -r cat > /dev/null
         
-    # 4. Exécuter l'Analyse CodeQL (PASSAGE À V4)
+    # 4. Exécuter l'Analyse CodeQL
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
