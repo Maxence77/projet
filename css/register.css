@@ -1,5 +1,6 @@
 
 /* --- VARIABLES des Couleurs --- */
+/* Définition des couleurs et effets réutilisables */
 :root {
     --bg-global: #000000;
     --bg-card: #1E1E1E;
@@ -12,28 +13,31 @@
     --transition-speed: 0.3s;
 }
 
+/* Réinitialisation des marges et padding pour tous les éléments */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Styles de base pour le corps de la page */
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--bg-global);
     color: var(--text-main);
-    height: 100vh;
+    height: 100vh; /* Prend toute la hauteur de la fenêtre */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
     padding: 20px; /* Pour éviter que ça colle aux bords sur mobile */
 }
 
 /* --- CARTE DE CONNEXION --- */
+/* Conteneur principal du formulaire */
 .login-card {
     background-color: var(--bg-card);
     width: 100%;
-    max-width: 420px;
+    max-width: 420px; /* Largeur maximale pour ne pas être trop large sur grand écran */
     padding: 40px;
     border-radius: 8px;
     box-shadow: var(--shadow-card);
@@ -42,18 +46,21 @@ body {
 }
 
 /* --- LOGO --- */
+/* Conteneur du logo */
 .logo-container {
     margin-bottom: 30px;
     font-size: 32px;
     font-weight: 900; /* Très gras */
     letter-spacing: -1px;
-    user-select: none;
+    user-select: none; /* Empêche la sélection du texte */
 }
 
+/* Texte principal du logo */
 .logo-text {
     color: var(--text-main);
 }
 
+/* Badge coloré du logo */
 .logo-badge {
     background-color: var(--accent-orange);
     color: var(--text-main); /* Le blanc sur orange assure le contraste max */
@@ -63,6 +70,7 @@ body {
     display: inline-block;
 }
 
+/* Titre de la page */
 h1 {
     font-size: 24px;
     font-weight: 700;
@@ -72,11 +80,13 @@ h1 {
 }
 
 /* --- FORMULAIRE --- */
+/* Groupe contenant un label et un input */
 .form-group {
     margin-bottom: 20px;
     text-align: left;
 }
 
+/* Étiquette des champs */
 label {
     display: block;
     margin-bottom: 8px;
@@ -85,6 +95,7 @@ label {
     font-weight: 600;
 }
 
+/* Champs de saisie texte et mot de passe */
 input[type="text"],
 input[type="password"] {
     width: 100%;
@@ -95,20 +106,23 @@ input[type="password"] {
     color: var(--text-main);
     font-family: inherit;
     font-size: 16px;
-    outline: none;
+    outline: none; /* Supprime le contour par défaut du navigateur */
     transition: all var(--transition-speed) ease;
 }
 
+/* Style du texte indicatif (placeholder) */
 input::placeholder {
     color: #555;
 }
 
 /* --- ÉTATS INTERACTIFS INPUTS --- */
+/* Au survol de la souris */
 input[type="text"]:hover,
 input[type="password"]:hover {
     background-color: #1a1a1a;
 }
 
+/* Lorsqu'on clique dans le champ (focus) */
 input[type="text"]:focus,
 input[type="password"]:focus {
     border-color: var(--accent-orange);
@@ -117,6 +131,7 @@ input[type="password"]:focus {
 }
 
 /* --- OPTIONS (CHECKBOX & OUBLIÉ) --- */
+/* Conteneur pour "Se souvenir de moi" et "Mot de passe oublié" */
 .form-options {
     display: flex;
     justify-content: space-between;
@@ -126,12 +141,14 @@ input[type="password"]:focus {
     color: var(--text-secondary);
 }
 
+/* Conteneur de la case à cocher */
 .checkbox-container {
     display: flex;
     align-items: center;
     cursor: pointer;
 }
 
+/* Style de la case à cocher */
 .checkbox-container input {
     margin-right: 8px;
     width: 16px;
@@ -140,6 +157,7 @@ input[type="password"]:focus {
     cursor: pointer;
 }
 
+/* Lien "Mot de passe oublié" */
 .forgot-link {
     color: var(--text-secondary);
     text-decoration: none;
@@ -151,7 +169,8 @@ input[type="password"]:focus {
     text-decoration: underline;
 }
 
-/* --- BOUTON CTA --- */
+/* --- BOUTON CTA (Call To Action) --- */
+/* Bouton de soumission */
 .btn-submit {
     width: 100%;
     padding: 16px;
@@ -167,23 +186,27 @@ input[type="password"]:focus {
     letter-spacing: 0.5px;
 }
 
+/* Effet au survol du bouton */
 .btn-submit:hover {
     background-color: #ffad33; /* Légèrement plus clair */
     box-shadow: 0 0 15px rgba(255, 153, 0, 0.6);
     transform: translateY(-1px);
 }
 
+/* Effet au clic sur le bouton */
 .btn-submit:active {
     transform: translateY(1px);
 }
 
 /* --- PIED DE CARTE --- */
+/* Zone en bas de la carte (lien d'inscription) */
 .card-footer {
     margin-top: 25px;
     font-size: 14px;
     color: var(--text-secondary);
 }
 
+/* Lien vers la page d'inscription */
 .signup-link {
     color: var(--accent-orange);
     text-decoration: none;
@@ -197,6 +220,7 @@ input[type="password"]:focus {
     text-decoration: underline;
 }
 
+/* Lien de retour à l'accueil */
 .RetourAccueil-link {
     color: var(--text-main);
     text-decoration: none;
@@ -211,6 +235,7 @@ input[type="password"]:focus {
 }
 
 /* --- RESPONSIVE --- */
+/* Adaptation pour les petits écrans (mobiles) */
 @media (max-width: 480px) {
     .login-card {
         padding: 30px 20px;

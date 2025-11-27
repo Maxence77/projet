@@ -1,37 +1,55 @@
 <?php
+// Définit l'en-tête de la réponse comme étant du JSON
 header('Content-Type: application/json');
+// Inclut le fichier de connexion à la base de données
 require 'db.php';
 
+// Récupère la méthode HTTP utilisée (GET, POST, DELETE, etc.)
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Si la méthode est GET (récupération de données)
 if ($method === 'GET') {
-    // List projects
+    // Prépare la requête pour lister tous les projets, triés par date de création décroissante
     $stmt = $pdo->query("SELECT * FROM projects ORDER BY created_at DESC");
+    // Exécute la requête et renvoie les résultats au format JSON
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
+// Si la méthode est POST (envoi de données)
 } elseif ($method === 'POST') {
-    // Add project
+    // Récupère les données JSON envoyées dans le corps de la requête
     $data = json_decode(file_get_contents("php://input"), true);
+    // Récupère le titre, la description et le statut (par défaut 'pending')
     $title = $data['title'] ?? '';
     $description = $data['description'] ?? '';
     $status = $data['status'] ?? 'pending';
 
+    // Vérifie si le titre est présent
     if ($title) {
+        // Prépare la requête d'insertion d'un nouveau projet
         $stmt = $pdo->prepare("INSERT INTO projects (title, description, status) VALUES (?, ?, ?)");
+        // Exécute la requête avec les données fournies
         $stmt->execute([$title, $description, $status]);
+        // Renvoie un succès
         echo json_encode(['success' => true]);
     } else {
+        // Renvoie une erreur si le titre est manquant
         echo json_encode(['success' => false, 'message' => 'Titre requis']);
     }
 
+// Si la méthode est DELETE (suppression de données)
 } elseif ($method === 'DELETE') {
-    // Delete project
+    // Récupère l'ID du projet à supprimer depuis les paramètres d'URL
     $id = $_GET['id'] ?? 0;
+    // Vérifie si un ID a été fourni
     if ($id) {
+        // Prépare la requête de suppression du projet
         $stmt = $pdo->prepare("DELETE FROM projects WHERE id = ?");
+        // Exécute la requête avec l'ID fourni
         $stmt->execute([$id]);
+        // Renvoie un succès
         echo json_encode(['success' => true]);
     } else {
+        // Renvoie une erreur si l'ID est manquant
         echo json_encode(['success' => false, 'message' => 'ID requis']);
     }
 }
