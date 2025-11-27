@@ -1,0 +1,42 @@
+# Nom du workflow
+name: OWASP ZAP DAST Scan
+
+on:
+  push:
+    # On déclenche sur main, car DAST coûte cher et nécessite un déploiement stable
+    branches: [ main ] 
+  # PERMET DE LANCER LE SCAN MANUELLEMENT SUR N'IMPORTE QUELLE BRANCHE
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'URL de l''application à scanner (ex: http://staging.monprojet.com)'
+        required: true
+        default: 'https://votre-url-temporaire.com' # Laissez cette URL par défaut pour l'instant
+  
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Run ZAP DAST Scan
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          # LA CIBLE EST PRISE DE L'ENTRÉE MANUELLE, SINON ELLE PREND LA VALEUR PAR DÉFAUT
+          target: ${{ github.event.inputs.target_url }}
+          format: sarif
+          max-duration: '5m' 
+          fail-action: true
+        
+      - name: Upload SARIF Report to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: zap.sarif
