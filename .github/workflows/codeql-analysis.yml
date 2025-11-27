@@ -26,8 +26,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Les noms des langages sont critiques : 'javascript' et 'php' en minuscules.
-        language: [ 'javascript', 'php' ]
+        # CORRECTION V4 : Format de liste le plus simple et le plus fiable pour les langages.
+        language: [ javascript, php ]
 
     steps:
     - name: Checkout repository
@@ -39,11 +39,12 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
+        # Le langage est passé par la variable de matrice d'inclusion
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
-    # 2. Construction des Dépendances (MAINTENANT FACULTATIVE)
-    # L'ajout de "|| exit 0" empêche l'échec si composer.json ou package.json sont absents.
+    # 2. Installation des Dépendances (Facultative pour éviter l'échec)
+    # Le "|| exit 0" est la clé si vous n'avez pas de composer.json ou package.json
     - if: ${{ matrix.language == 'php' }}
       name: Install PHP dependencies (Composer)
       run: |
@@ -54,13 +55,11 @@ jobs:
       run: |
         npm install || exit 0
 
-    # 3. ÉTAPE CLÉ : Construction factice pour le JavaScript
-    # Cette étape est cruciale pour que CodeQL puisse "voir" le code JS/HTML et l'analyser.
+    # 3. Étape de Construction Factice (Correction pour l'erreur "no source code seen")
     - if: ${{ matrix.language == 'javascript' }}
       name: Build JavaScript for CodeQL
       run: |
         echo "Forcing CodeQL to see JS/HTML files"
-        # La commande 'true' indique un succès immédiat
         true
         
     # 4. Exécuter l'Analyse CodeQL
