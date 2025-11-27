@@ -24,7 +24,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 1. Initialiser l'Action CodeQL - MAINTENANT SEULEMENT POUR JAVASCRIPT
+    # 1. Initialiser l'Action CodeQL - SEULEMENT JAVASCRIPT
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
@@ -37,11 +37,9 @@ jobs:
         npm install || exit 0
 
     # 3. Étape de Construction (Correction pour JS/HTML)
-    # Reste pour corriger l'erreur "no source code seen"
     - name: Build JavaScript for CodeQL (Force indexing)
       run: |
         echo "Forcing CodeQL to see JS/HTML files"
-        # Commande pour lister les fichiers et forcer l'indexation
         find . -name "*.js" -print -o -name "*.html" -print | xargs -r cat > /dev/null
         
     # 4. Exécuter l'Analyse CodeQL
