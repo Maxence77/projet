@@ -1,4 +1,5 @@
-name: "CodeQL Simple Analysis"
+# Nom du workflow qui apparaîtra dans l'onglet Actions
+name: "CodeQL Simple JS Analysis"
 
 on:
   push:
@@ -23,29 +24,24 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 1. Initialiser l'Action CodeQL
-    # Nous initialisons TOUS les langages en une seule fois pour contourner l'erreur de matrice.
+    # 1. Initialiser l'Action CodeQL - MAINTENANT SEULEMENT POUR JAVASCRIPT
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
-        languages: 'javascript, php' 
+        languages: 'javascript' 
         queries: security-and-quality
 
-    # 2. Installation des Dépendances (Facultative - utilise IF simple sans matrice)
-    - name: Install PHP dependencies (Composer)
-      run: |
-        # Cette étape s'exécute, mais le "|| exit 0" la rend facultative
-        composer install --no-dev --prefer-dist || exit 0
-        
+    # 2. Installation des Dépendances (JS seulement)
     - name: Install JS dependencies (npm/yarn)
       run: |
         npm install || exit 0
 
     # 3. Étape de Construction (Correction pour JS/HTML)
+    # Reste pour corriger l'erreur "no source code seen"
     - name: Build JavaScript for CodeQL (Force indexing)
       run: |
         echo "Forcing CodeQL to see JS/HTML files"
-        # Commande pour lister les fichiers et forcer l'indexation par l'action CodeQL
+        # Commande pour lister les fichiers et forcer l'indexation
         find . -name "*.js" -print -o -name "*.html" -print | xargs -r cat > /dev/null
         
     # 4. Exécuter l'Analyse CodeQL
