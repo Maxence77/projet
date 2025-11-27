@@ -24,24 +24,32 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 1. Initialiser l'Action CodeQL - SEULEMENT JAVASCRIPT
+    # Étape critique : Créer le fichier de configuration à la volée.
+    # Ceci remplace la nécessité de créer le fichier codeql-config.yml manuellement.
+    - name: Create CodeQL Config File for JS/HTML
+      run: |
+        mkdir -p .github/codeql
+        echo "name: \"Default configuration\"" > .github/codeql/codeql-config.yml
+        echo "disable-default-queries: true" >> .github/codeql/codeql-config.yml
+        echo "queries: security-and-quality" >> .github/codeql/codeql-config.yml
+        echo "paths:" >> .github/codeql/codeql-config.yml
+        echo "  - 'css'" >> .github/codeql/codeql-config.yml
+        echo "  - 'js'" >> .github/codeql/codeql-config.yml
+        echo "  - 'php'" >> .github/codeql/codeql-config.yml
+        echo "  - '*.html'" >> .github/codeql/codeql-config.yml
+        
+    # 1. Initialiser l'Action CodeQL (Référence le fichier créé au-dessus)
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
         languages: 'javascript' 
-        queries: security-and-quality
+        config-file: .github/codeql/codeql-config.yml
 
     # 2. Installation des Dépendances (JS seulement)
     - name: Install JS dependencies (npm/yarn)
       run: |
         npm install || exit 0
 
-    # 3. Étape de Construction (Correction pour JS/HTML)
-    - name: Build JavaScript for CodeQL (Force indexing)
-      run: |
-        echo "Forcing CodeQL to see JS/HTML files"
-        find . -name "*.js" -print -o -name "*.html" -print | xargs -r cat > /dev/null
-        
-    # 4. Exécuter l'Analyse CodeQL
+    # 3. Exécuter l'Analyse CodeQL
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
