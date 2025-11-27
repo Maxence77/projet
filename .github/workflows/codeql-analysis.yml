@@ -1,19 +1,14 @@
 # Nom du workflow qui apparaîtra dans l'onglet Actions
 name: "CodeQL Analysis"
 
-# Quand le workflow doit s'exécuter
 on:
   push:
-    # Déclencher sur les branches de développement/production
     branches: [ main, Backend, Frontend, DevCops ]
   pull_request:
-    # Déclencher sur les PR ciblant ces branches
     branches: [ main, Backend, Frontend, DevCops ]
   schedule:
-    # Exécuter une analyse complète chaque semaine
     - cron: '0 3 * * 1'
 
-# Permettre à GitHub Actions de lire le contenu et d'écrire les résultats
 permissions:
   contents: read
   security-events: write
@@ -26,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # CORRECTION V4 : Format de liste le plus simple et le plus fiable pour les langages.
+        # Format de liste le plus simple et le plus fiable pour les langages.
         language: [ javascript, php ]
 
     steps:
@@ -35,16 +30,14 @@ jobs:
       with:
         fetch-depth: 0
 
-    # 1. Initialiser l'Action CodeQL
+    # 1. Initialiser l'Action CodeQL (PASSAGE À V4)
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
-        # Le langage est passé par la variable de matrice d'inclusion
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
-    # 2. Installation des Dépendances (Facultative pour éviter l'échec)
-    # Le "|| exit 0" est la clé si vous n'avez pas de composer.json ou package.json
+    # 2. Installation des Dépendances (Facultative)
     - if: ${{ matrix.language == 'php' }}
       name: Install PHP dependencies (Composer)
       run: |
@@ -55,13 +48,14 @@ jobs:
       run: |
         npm install || exit 0
 
-    # 3. Étape de Construction Factice (Correction pour l'erreur "no source code seen")
+    # 3. Étape de Construction (Correction pour JS/HTML - utilise find/cat pour forcer l'indexation)
     - if: ${{ matrix.language == 'javascript' }}
-      name: Build JavaScript for CodeQL
+      name: Build JavaScript for CodeQL (Force indexing)
       run: |
         echo "Forcing CodeQL to see JS/HTML files"
-        true
+        # Utiliser une commande simple de liste qui touche tous les fichiers JS/HTML
+        find . -name "*.js" -print -o -name "*.html" -print | xargs -r cat > /dev/null
         
-    # 4. Exécuter l'Analyse CodeQL
+    # 4. Exécuter l'Analyse CodeQL (PASSAGE À V4)
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
