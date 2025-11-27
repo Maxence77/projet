@@ -3,58 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Gestion de Projet</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>WORKHUB - Connexion</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
 
-<div class="container login-container">
-    <h1>Connexion</h1>
-    <form id="login-form">
-        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
-        <input type="password" id="password" placeholder="Mot de passe" required>
-        <button type="submit">Se connecter</button>
-    </form>
-    <p id="error-msg" style="color: red; text-align: center; display: none;">Identifiants incorrects</p>
-    <p style="text-align: center; margin-top: 10px;">
-        Pas de compte ? <a href="register.html">S'inscrire</a>
-    </p>
-    <p style="text-align: center; margin-top: 15px;">
-        <a href="index.html" style="color: #ffa31a; text-decoration: none;">&larr; Retour à l'accueil</a>
-    </p>
-</div>
+    <div class="login-card">
+        <div class="logo-container">
+            <span class="logo-text">WORK</span><span class="logo-badge">HUB</span>
+        </div>
 
-<script>
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorMsg = document.getElementById('error-msg');
+        <h1>Se connecter</h1>
 
-        try {
-            const res = await fetch('php/auth.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'login', username, password })
-            });
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Nom Utilisateur</label>
+                <input type="text" id="username" name="username" placeholder="Nom Utilisateur" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div><br>
+
+            <button type="submit" class="btn-submit">Se Connecter</button>
+        </form>
+
+        <p id="message" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
+
+        <div class="card-footer">
+            Pas encore de compte ? 
+            <a href="register.html" class="signup-link">S'inscrire</a><br><br>
+            <a href="index.html" class="RetourAccueil-link">-> Retour Accueil</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            const data = await res.json();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
             
-            if (data.success) {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('username', username);
-                window.location.href = 'dashboard.html';
-            } else {
-                errorMsg.textContent = data.message || 'Identifiants incorrects';
-                errorMsg.style.display = 'block';
+            messageEl.textContent = "Connexion en cours...";
+            messageEl.style.color = "white";
+
+            try {
+                const response = await fetch('php/auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.style.color = "#4caf50";
+                    messageEl.textContent = "Connexion réussie !";
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', username);
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    messageEl.style.color = "#f44336";
+                    messageEl.textContent = data.message || "Identifiants incorrects";
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                messageEl.style.color = "#f44336";
+                messageEl.textContent = "Erreur de connexion au serveur.";
             }
-        } catch (err) {
-            console.error(err);
-            errorMsg.textContent = 'Erreur de connexion au serveur';
-            errorMsg.style.display = 'block';
-        }
-    });
-</script>
+        });
+    </script>
 
 </body>
 </html>

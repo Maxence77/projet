@@ -33,20 +33,15 @@
             <nav class="flex-1 py-6 space-y-1" id="sidebar-nav"></nav>
 
             <div class="p-4 border-t border-white/5 bg-[#0a0a0a]">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3 cursor-pointer hover:bg-white/5 p-2 rounded-xl transition-colors group border border-transparent hover:border-white/5 flex-1">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center border border-white/10 group-hover:border-[#FF9900] transition-colors relative shadow-lg">
-                            <span class="font-bold text-sm" id="user-initials">JD</span>
-                            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#121212]"></div>
-                        </div>
-                        <div class="overflow-hidden">
-                            <div class="text-sm font-bold truncate group-hover:text-[#FF9900] transition-colors" id="user-name">Melvyn</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Chef de Projet</div>
-                        </div>
+                <div class="flex items-center space-x-3 cursor-pointer hover:bg-white/5 p-2 rounded-xl transition-colors group border border-transparent hover:border-white/5">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center border border-white/10 group-hover:border-[#FF9900] transition-colors relative shadow-lg">
+                        <span class="font-bold text-sm">JD</span>
+                        <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#121212]"></div>
                     </div>
-                    <button onclick="logout()" class="ml-2 p-2 rounded-lg text-gray-500 hover:text-red-500 hover:bg-white/5 transition-all" title="Déconnexion">
-                        <i data-lucide="log-out" class="w-5 h-5"></i>
-                    </button>
+                    <div class="overflow-hidden">
+                        <div class="text-sm font-bold truncate group-hover:text-[#FF9900] transition-colors">Melvyn</div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Chef de Projet</div>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -98,8 +93,8 @@
                         <button onclick="resetData()" class="text-xs font-bold text-gray-600 hover:text-red-500 transition-colors uppercase tracking-wider px-3 py-1">Reset</button>
                         <div class="h-4 w-[1px] bg-white/10"></div>
                         <div class="flex -space-x-2 overflow-hidden px-2">
-                            <div class="inline-block h-8 w-8 rounded-full ring-2 ring-black bg-gray-700 flex items-center justify-center text-xs font-bold">JD</div>
-                            <div class="inline-block h-8 w-8 rounded-full ring-2 ring-black bg-gray-600 flex items-center justify-center text-xs font-bold">+2</div>
+                            <div class="inline-block h-8 w-8 rounded-full ring-2 ring-black bg-gray-700 flex items-center justify-center text-xs font-bold shadow-lg">JD</div>
+                            <div class="inline-block h-8 w-8 rounded-full ring-2 ring-black bg-gray-600 flex items-center justify-center text-xs font-bold shadow-lg">+2</div>
                         </div>
                         <button class="text-gray-400 hover:text-white font-medium text-sm flex items-center bg-[#1E1E1E] px-3 py-1.5 rounded-lg border border-white/5 hover:border-white/20 transition-all shadow-sm">
                             <i data-lucide="filter" class="w-3.5 h-3.5 mr-2"></i> Filtres
@@ -112,97 +107,6 @@
                     <div class="flex flex-col h-full kanban-column p-3 border border-transparent" id="col-todo" ondrop="drop(event, 'todo')" ondragover="allowDrop(event)"></div>
                     <div class="flex flex-col h-full kanban-column p-3 border border-transparent" id="col-in-progress" ondrop="drop(event, 'in-progress')" ondragover="allowDrop(event)"></div>
                     <div class="flex flex-col h-full kanban-column p-3 border border-transparent" id="col-done" ondrop="drop(event, 'done')" ondragover="allowDrop(event)"></div>
-                </div>
-            </div>
-
-            <!-- Tasks View -->
-            <div id="tasks-view" class="flex-1 overflow-y-auto p-8 custom-scrollbar relative hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-white flex items-center"><i data-lucide="check-square" class="mr-3 text-[#FF9900]"></i> Mes Tâches</h2>
-                    <button onclick="openTaskModal()" class="flex items-center px-4 py-2 rounded-lg bg-[#FF9900] text-black font-bold text-sm hover:bg-[#ff8800] transition-colors">
-                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Nouvelle Tâche
-                    </button>
-                </div>
-                
-                <div class="rounded-2xl glass-panel border border-white/5 bg-[#1a1a1a] overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-white/5 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                <th class="p-4">Titre</th>
-                                <th class="p-4">Projet</th>
-                                <th class="p-4">Priorité</th>
-                                <th class="p-4">Statut</th>
-                                <th class="p-4">Échéance</th>
-                                <th class="p-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tasks-table-body" class="text-sm text-gray-300 divide-y divide-white/5">
-                            <!-- Rows generated by JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Teams View -->
-            <div id="teams-view" class="flex-1 overflow-y-auto p-8 custom-scrollbar relative hidden">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center"><i data-lucide="users" class="mr-3 text-[#FF9900]"></i> Équipes</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-6 rounded-2xl glass-panel border border-white/5 bg-[#1a1a1a] hover:border-[#FF9900]/30 transition-colors group">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-lg text-white">Développeurs</h3>
-                            <span class="bg-blue-500/20 text-blue-400 text-xs font-bold px-2 py-1 rounded">TECH</span>
-                        </div>
-                        <div class="flex -space-x-2 overflow-hidden mb-4">
-                            <div class="inline-block h-10 w-10 rounded-full ring-2 ring-[#1a1a1a] bg-gray-700 flex items-center justify-center text-xs font-bold">JD</div>
-                            <div class="inline-block h-10 w-10 rounded-full ring-2 ring-[#1a1a1a] bg-gray-600 flex items-center justify-center text-xs font-bold">AL</div>
-                            <div class="inline-block h-10 w-10 rounded-full ring-2 ring-[#1a1a1a] bg-gray-500 flex items-center justify-center text-xs font-bold">+3</div>
-                        </div>
-                        <button class="w-full py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-bold text-gray-300 transition-colors">Voir les membres</button>
-                    </div>
-                    <div class="p-6 rounded-2xl glass-panel border border-white/5 bg-[#1a1a1a] hover:border-[#FF9900]/30 transition-colors group">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-lg text-white">Designers</h3>
-                            <span class="bg-purple-500/20 text-purple-400 text-xs font-bold px-2 py-1 rounded">CREATIVE</span>
-                        </div>
-                        <div class="flex -space-x-2 overflow-hidden mb-4">
-                            <div class="inline-block h-10 w-10 rounded-full ring-2 ring-[#1a1a1a] bg-gray-700 flex items-center justify-center text-xs font-bold">MK</div>
-                            <div class="inline-block h-10 w-10 rounded-full ring-2 ring-[#1a1a1a] bg-gray-600 flex items-center justify-center text-xs font-bold">S</div>
-                        </div>
-                        <button class="w-full py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-bold text-gray-300 transition-colors">Voir les membres</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Settings View -->
-            <div id="settings-view" class="flex-1 overflow-y-auto p-8 custom-scrollbar relative hidden">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center"><i data-lucide="settings" class="mr-3 text-[#FF9900]"></i> Paramètres</h2>
-                <div class="max-w-2xl space-y-6">
-                    <div class="p-6 rounded-2xl glass-panel border border-white/5 bg-[#1a1a1a]">
-                        <h3 class="font-bold text-lg mb-4 text-white">Profil Utilisateur</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Nom d'utilisateur</label>
-                                <input type="text" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-white focus:border-[#FF9900] focus:outline-none transition-colors" id="settings-username">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Rôle</label>
-                                <input type="text" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-gray-400 focus:outline-none cursor-not-allowed" value="Administrateur" disabled>
-                            </div>
-                            <div class="pt-2">
-                                <button onclick="saveProfile()" class="px-6 py-2.5 bg-[#FF9900] text-black font-bold rounded-xl text-sm hover:bg-[#ff8800] transition-colors shadow-lg">Enregistrer les modifications</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-6 rounded-2xl glass-panel border border-white/5 bg-[#1a1a1a]">
-                        <h3 class="font-bold text-lg mb-4 text-white">Apparence</h3>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-300">Mode Sombre</span>
-                            <div class="w-12 h-6 bg-[#FF9900] rounded-full relative cursor-pointer opacity-50" title="Toujours actif">
-                                <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>
@@ -304,7 +208,6 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- DATA ---
-        let currentView = 'dashboard';
         const INITIAL_TASKS = [
             { id: 1, title: "Refonte de l'interface utilisateur", description: "Moderniser le dashboard avec un style glassmorphism et des animations fluides.", project: "Projet Alpha", priority: "high", status: "todo", date: new Date(Date.now() + 86400000).toISOString().split('T')[0], comments: 3, attachments: 1, tags: ["UI", "Design"] },
             { id: 2, title: "Analyse des données Q3", description: "Extraire les KPIs principaux et préparer la présentation pour le board.", project: "Finance", priority: "normal", status: "todo", date: "2024-11-28", comments: 0, attachments: 2, tags: ["Data", "Report"] },
@@ -321,7 +224,6 @@
             localStorage.setItem('workhub_tasks_v2', JSON.stringify(tasks));
             renderKanban();
             renderMetrics();
-            renderTasksList();
         }
 
         function resetData() {
@@ -391,51 +293,22 @@
         function renderSidebar() {
             const nav = document.getElementById('sidebar-nav');
             const items = [
-                { id: 'dashboard', icon: 'layout-dashboard', label: 'Tableau de Bord' },
-                { id: 'tasks', icon: 'check-square', label: 'Mes Tâches' },
-                { id: 'teams', icon: 'users', label: 'Équipes' },
+                { icon: 'layout-dashboard', label: 'Tableau de Bord', active: true },
+                { icon: 'check-square', label: 'Mes Tâches', active: false },
+                { icon: 'users', label: 'Équipes', active: false },
                 { separator: true, label: 'Système' },
-                { id: 'settings', icon: 'settings', label: 'Paramètres' }
+                { icon: 'settings', label: 'Paramètres', active: false }
             ];
 
             nav.innerHTML = items.map(item => {
                 if (item.separator) return `<div class="pt-8 pb-3 px-6 text-[11px] font-extrabold text-gray-600 uppercase tracking-widest">${item.label}</div>`;
-                
-                const isActive = item.id === currentView;
-                const activeClass = isActive ? 'bg-[#FF9900]/10 text-white border-l-4 border-[#FF9900]' : 'border-l-4 border-transparent text-gray-500 hover:text-white hover:bg-white/5';
-                const iconColor = isActive ? 'text-[#FF9900]' : 'text-gray-500 group-hover:text-white';
-                
-                return `<div onclick="switchView('${item.id}')" class="flex items-center px-6 py-3.5 cursor-pointer transition-all duration-200 group ${activeClass}">
+                const activeClass = item.active ? 'bg-[#FF9900]/10 text-white border-l-4 border-[#FF9900]' : 'border-l-4 border-transparent text-gray-500 hover:text-white hover:bg-white/5';
+                const iconColor = item.active ? 'text-[#FF9900]' : 'text-gray-500 group-hover:text-white';
+                return `<div class="flex items-center px-6 py-3.5 cursor-pointer transition-all duration-200 group ${activeClass}">
                             <div class="mr-4 ${iconColor}"><i data-lucide="${item.icon}" class="w-5 h-5"></i></div>
                             <span class="font-bold tracking-wide text-sm">${item.label}</span>
                         </div>`;
             }).join('');
-            lucide.createIcons();
-        }
-
-        function switchView(view) {
-            currentView = view;
-            renderSidebar();
-            
-            // Hide all views
-            ['dashboard-content', 'tasks-view', 'teams-view', 'settings-view'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-
-            // Show selected view
-            if (view === 'dashboard') document.getElementById('dashboard-content').classList.remove('hidden');
-            if (view === 'tasks') {
-                document.getElementById('tasks-view').classList.remove('hidden');
-                renderTasksList();
-            }
-            if (view === 'teams') document.getElementById('teams-view').classList.remove('hidden');
-            if (view === 'settings') {
-                document.getElementById('settings-view').classList.remove('hidden');
-                document.getElementById('settings-username').value = localStorage.getItem('username') || 'Utilisateur';
-            }
-            
-            lucide.createIcons();
         }
 
         function renderMetrics() {
@@ -551,64 +424,6 @@
                 `;
             });
             lucide.createIcons();
-        }
-
-        function renderTasksList() {
-            const tbody = document.getElementById('tasks-table-body');
-            if (!tbody) return;
-
-            tbody.innerHTML = tasks.map(task => {
-                const statusColors = {
-                    'todo': 'bg-gray-500/20 text-gray-400',
-                    'in-progress': 'bg-blue-500/20 text-blue-400',
-                    'done': 'bg-green-500/20 text-green-400'
-                };
-                const statusLabels = {
-                    'todo': 'À faire',
-                    'in-progress': 'En cours',
-                    'done': 'Terminé'
-                };
-                
-                const priorityColors = {
-                    'low': 'text-gray-400',
-                    'normal': 'text-blue-400',
-                    'high': 'text-orange-400',
-                    'urgent': 'text-red-500 font-bold'
-                };
-
-                return `
-                    <tr class="hover:bg-white/5 transition-colors group">
-                        <td class="p-4 font-medium text-white">${task.title}</td>
-                        <td class="p-4"><span class="bg-white/5 px-2 py-1 rounded text-xs font-bold uppercase text-gray-400">${task.project}</span></td>
-                        <td class="p-4 ${priorityColors[task.priority] || 'text-gray-400'} capitalize text-xs font-bold">${task.priority}</td>
-                        <td class="p-4">
-                            <span class="px-2 py-1 rounded text-xs font-bold ${statusColors[task.status]}">${statusLabels[task.status]}</span>
-                        </td>
-                        <td class="p-4 text-gray-400 text-xs">${task.date}</td>
-                        <td class="p-4 text-right">
-                            <button onclick="openTaskModal(${task.id})" class="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                            <button onclick="deleteTask(${task.id})" class="p-1.5 rounded-lg hover:bg-red-500/20 text-gray-400 hover:text-red-500 transition-colors ml-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            
-            if (tasks.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-gray-500">Aucune tâche trouvée.</td></tr>`;
-            }
-            lucide.createIcons();
-        }
-
-        function saveProfile() {
-            const newName = document.getElementById('settings-username').value;
-            if (newName && newName.trim() !== "") {
-                localStorage.setItem('username', newName);
-                document.getElementById('user-name').textContent = newName;
-                document.getElementById('user-initials').textContent = newName.substring(0, 2).toUpperCase();
-                showToast("Profil mis à jour avec succès", "success");
-            } else {
-                showToast("Le nom d'utilisateur ne peut pas être vide", "error");
-            }
         }
 
         // --- ACTIONS (CRUD) ---
@@ -780,22 +595,9 @@
         function handleSmartBriefing() { callGemini(`Briefing executif pour ${tasks.length} tâches.`, "SMART BRIEFING"); }
         function handleTaskBreakdown(t, p) { callGemini(`Checklist pour la tâche "${t}" du projet ${p}.`, `STRATÉGIE: ${t.toUpperCase()}`); }
 
-        function logout() {
-            if(confirm("Voulez-vous vraiment vous déconnecter ?")) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('username');
-                window.location.href = 'index.html';
-            }
-        }
-
         // --- INIT ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Update User Profile
-            const username = localStorage.getItem('username') || 'Utilisateur';
-            document.getElementById('user-name').textContent = username;
-            document.getElementById('user-initials').textContent = username.substring(0, 2).toUpperCase();
-
-            renderSidebar(); renderMetrics(); renderKanban(); renderTasksList(); lucide.createIcons();
+            renderSidebar(); renderMetrics(); renderKanban(); lucide.createIcons();
             
             // CMD+K Shortcut for search
             document.addEventListener('keydown', (e) => {

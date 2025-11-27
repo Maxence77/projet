@@ -3,57 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - Gestion de Projet</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>WORKHUB - Inscription</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/register.css">
 </head>
 <body>
 
-<div class="container login-container">
-    <h1>Inscription</h1>
-    <form id="register-form">
-        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
-        <input type="password" id="password" placeholder="Mot de passe" required>
-        <button type="submit">S'inscrire</button>
-    </form>
-    <p id="error-msg" style="color: red; text-align: center; display: none;"></p>
-    <p style="text-align: center; margin-top: 10px;">
-        Déjà un compte ? <a href="login.html">Se connecter</a>
-    </p>
-    <p style="text-align: center; margin-top: 15px;">
-        <a href="index.html" style="color: #ffa31a; text-decoration: none;">&larr; Retour à l'accueil</a>
-    </p>
-</div>
+    <div class="login-card">
+        <div class="logo-container">
+            <span class="logo-text">WORK</span><span class="logo-badge">HUB</span>
+        </div>
 
-<script>
-    document.getElementById('register-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorMsg = document.getElementById('error-msg');
+        <h1>Inscription</h1>
 
-        try {
-            const res = await fetch('php/auth.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'register', username, password })
-            });
+        <form id="register-form">
+            <div class="form-group">
+                <label for="username">Nom Utilisateur</label>
+                <input type="text" id="username" name="username" placeholder="Nom Utilisateur" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div><br>
+
+            <button type="submit" class="btn-submit">S'inscrire</button>
+        </form>
+        
+        <p id="message" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
+
+        <div class="card-footer">
+            Vous avez un compte ? 
+            <a href="login.html" class="signup-link">Se connecter</a><br><br>
+            <a href="index.html" class="RetourAccueil-link">-> Retour Accueil</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            const data = await res.json();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
             
-            if (data.success) {
-                alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
-                window.location.href = 'login.html';
-            } else {
-                errorMsg.textContent = data.message || 'Erreur lors de l\'inscription';
-                errorMsg.style.display = 'block';
+            messageEl.textContent = "Traitement en cours...";
+            messageEl.style.color = "white";
+
+            try {
+                const response = await fetch('php/auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'register',
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageEl.style.color = "#4caf50"; // Green
+                    messageEl.textContent = "Inscription réussie ! Redirection...";
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } else {
+                    messageEl.style.color = "#f44336"; // Red
+                    messageEl.textContent = data.message || "Erreur lors de l'inscription";
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                messageEl.style.color = "#f44336";
+                messageEl.textContent = "Erreur de connexion au serveur.";
             }
-        } catch (err) {
-            console.error(err);
-            errorMsg.textContent = 'Erreur de connexion au serveur';
-            errorMsg.style.display = 'block';
-        }
-    });
-</script>
+        });
+    </script>
 
 </body>
 </html>

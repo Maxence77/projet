@@ -1,0 +1,222 @@
+
+/* --- VARIABLES des Couleurs --- */
+:root {
+    --bg-global: #000000;
+    --bg-card: #1E1E1E;
+    --bg-input: #121212;
+    --accent-orange: #FF9900;
+    --text-main: #FFFFFF;
+    --text-secondary: #AAAAAA;
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.8);
+    --glow-focus: 0 0 10px rgba(255, 153, 0, 0.4);
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-global);
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Pour éviter que ça colle aux bords sur mobile */
+}
+
+/* --- CARTE DE CONNEXION --- */
+.login-card {
+    background-color: var(--bg-card);
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+    border: 1px solid #2a2a2a; /* Légère bordure pour définir la carte sur les écrans noirs de mauvaise qualité */
+}
+
+/* --- LOGO --- */
+.logo-container {
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 900; /* Très gras */
+    letter-spacing: -1px;
+    user-select: none;
+}
+
+.logo-text {
+    color: var(--text-main);
+}
+
+.logo-badge {
+    background-color: var(--accent-orange);
+    color: var(--text-main); /* Le blanc sur orange assure le contraste max */
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 2px;
+    display: inline-block;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- FORMULAIRE --- */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: var(--bg-input);
+    border: 1px solid transparent; /* Bordure transparente par défaut pour éviter le saut au focus */
+    border-radius: 4px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+    transition: all var(--transition-speed) ease;
+}
+
+input::placeholder {
+    color: #555;
+}
+
+/* --- ÉTATS INTERACTIFS INPUTS --- */
+input[type="text"]:hover,
+input[type="password"]:hover {
+    background-color: #1a1a1a;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: var(--accent-orange);
+    box-shadow: var(--glow-focus);
+    background-color: #000;
+}
+
+/* --- OPTIONS (CHECKBOX & OUBLIÉ) --- */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-container input {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-orange); /* Modern CSS feature */
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.forgot-link:hover {
+    color: var(--accent-orange);
+    text-decoration: underline;
+}
+
+/* --- BOUTON CTA --- */
+.btn-submit {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--accent-orange);
+    color: var(--text-main); /* Blanc sur Orange */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    letter-spacing: 0.5px;
+}
+
+.btn-submit:hover {
+    background-color: #ffad33; /* Légèrement plus clair */
+    box-shadow: 0 0 15px rgba(255, 153, 0, 0.6);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* --- PIED DE CARTE --- */
+.card-footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.signup-link {
+    color: var(--accent-orange);
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+    transition: color var(--transition-speed);
+}
+
+.signup-link:hover {
+    color: #ffad33;
+    text-decoration: underline;
+}
+
+.RetourAccueil-link {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+    transition: color var(--transition-speed);
+}
+
+.RetourAccueil-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 30px 20px;
+    }
+    
+    .logo-container {
+        font-size: 28px;
+    }
+}
