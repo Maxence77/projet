@@ -1,0 +1,87 @@
+name: "DevSecOps CI/CD Pipeline FINAL"
+
+# --------------------------
+# DÉCLENCHEURS (Triggers)
+# --------------------------
+on:
+  push:
+    branches: [ main, DevCops, Backend, Frontend ]
+  pull_request:
+    branches: [ main, DevCops ]
+
+# PERMISSIONS
+permissions:
+  contents: read
+  pull-requests: write # Pour que SonarCloud puisse commenter les PR
+  security-events: write 
+
+# --------------------------
+# JOBS (Tâches)
+# --------------------------
+jobs:
+  # Tâche A: SonarCloud (SAST) - Intégration Continue (CI)
+  sonar_scan:
+    name: SonarCloud Scan (SAST)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Nécessaire pour l'analyse SonarCloud
+
+      - name: Setup Environment (PHP/JS)
+        # Configure les environnements nécessaires pour que les dépendances s'installent
+        run: |
+          # Installation Node.js pour les dépendances JavaScript
+          curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          # Configuration PHP (à adapter si vous avez besoin d'une version spécifique)
+          sudo apt-get install -y php php-cli php-mbstring php-xml composer
+
+      - name: Install dependencies (PHP/JS)
+        # Installe les dépendances nécessaires avant le scan SonarCloud
+        run: |
+          composer install --no-dev --prefer-dist || echo "Skipping PHP dependencies."
+          npm install || echo "Skipping JS dependencies."
+
+      - name: SonarCloud Analysis
+        uses: SonarSource/sonarcloud-github-action@v2.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=. 
+            -Dsonar.exclusions=**/*.min.js,**/*.css,**/*.html,**/*.yml,**/*.md 
+
+
+  # Tâche B: OWASP ZAP (DAST) - Déploiement (CD)
+  zap_scan:
+    name: OWASP ZAP (DAST)
+    runs-on: ubuntu-latest
+    needs: [sonar_scan] # Le DAST ne démarre que si le SAST (Sonar) a réussi
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      # ÉTAPE 1: DÉPLOIEMENT DE L'APPLICATION
+      # C'est l'étape la plus critique du CD: l'application doit tourner sur une URL accessible.
+      - name: Setup and Run Application (Test Environment)
+        run: |
+          echo "DÉPLOIEMENT EN COURS: Remplacez cette ligne par votre commande réelle de mise en service de l'application (ex: DOCKER/serveur web)."
+          # Exemple théorique: npm start &
+        
+      # ÉTAPE 2: ZAP SCAN
+      - name: ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.8.0
+        with:
+          # REMPLACEZ 'http://localhost:8080' PAR L'URL RÉELLE DE VOTRE ENVIRONNEMENT DE TEST
+          target: 'http://localhost:8080' 
+
+      - name: Upload ZAP DAST Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZAP-DAST-Report
+          path: zap_report.html
