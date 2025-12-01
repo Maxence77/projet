@@ -1,0 +1,96 @@
+# Nom du workflow qui apparaîtra dans l'onglet "Actions" de GitHub
+name: "DevSecOps - Pipeline Complet et Final"
+
+# --------------------------
+# DÉCLENCHEURS & PERMISSIONS
+# --------------------------
+on:
+  push:
+    # Déclenche le pipeline lorsque le code est poussé sur ces branches (pour le CI)
+    branches: [ main, DevCops ]
+  pull_request:
+    # Déclenche le pipeline lorsqu'une PR est ouverte (pour la vérification avant fusion)
+    branches: [ main, DevCops ]
+
+permissions:
+  contents: read
+  pull-requests: write # Permet à SonarCube de commenter les Pull Requests
+  security-events: write # Permet à ZAP de publier ses résultats de sécurité
+
+# --------------------------
+# JOBS (Tâches)
+# --------------------------
+jobs:
+  # Tâche A: SonarCube (SAST) - PHASE CI (Intégration Continue)
+  sonar_scan:
+    name: SonarCube Scan (SAST)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Essentiel pour une analyse complète des changements par SonarCube
+
+      - name: Setup Environment (PHP/JS)
+        # Installe les outils pour gérer les dépendances (Composer pour PHP, NPM pour JS)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm composer
+          
+      - name: Install dependencies (PHP/JS)
+        # Installe les dépendances spécifiques à votre projet pour une meilleure analyse
+        run: |
+          composer install --no-dev --prefer-dist || echo "Skipping PHP dependencies."
+          npm install || echo "Skipping JS dependencies."
+
+      - name: SonarCube Analysis
+        uses: SonarSource/sonarcloud-github-action@v2.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # Cette variable pointe vers l'URL de votre serveur SonarCube auto-hébergé
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=. # Analyse tous les fichiers dans le répertoire racine
+            -Dsonar.exclusions=**/*.min.js,**/*.css,**/*.html,**/*.yml,**/*.md 
+            
+  # ----------------------------------------------------------------------------------
+  # Tâche B: OWASP ZAP (DAST) - PHASE CD (Déploiement Continu / Test Dynamique)
+  # ----------------------------------------------------------------------------------
+  zap_scan:
+    name: OWASP ZAP (DAST)
+    runs-on: ubuntu-latest
+    # N'exécute cette tâche que si la tâche SonarCube a réussi
+    needs: [sonar_scan] 
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ÉTAPE 1: DÉPLOIEMENT DE L'APPLICATION
+      - name: Setup and Run Application (PHP Simple)
+        # Utilise le serveur web intégré de PHP pour lancer l'application (Scénario PHP Simple)
+        run: |
+          # Lance le serveur PHP sur le port 8080 en arrière-plan (&)
+          php -S 127.0.0.1:8080 -t . & 
+          # Attend que le serveur démarre avant de le scanner
+          sleep 10 
+          
+      # ÉTAPE 2: Lancement du ZAP Scan
+      - name: ZAP Full Scan
+        # Utilise l'action officielle pour lancer l'analyse dynamique
+        uses: zaproxy/action-full-scan@v0.8.0
+        with:
+          # Cible l'application lancée à l'étape précédente
+          target: 'http://127.0.0.1:8080' 
+
+      # ÉTAPE 3: Téléchargement du rapport
+      - name: Upload ZAP DAST Report
+        # Crée un artefact que vous pouvez télécharger depuis l'onglet "Actions" pour voir les résultats
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZAP-DAST-Report
+          path: zap_report.html
+          path: zap_report.html
