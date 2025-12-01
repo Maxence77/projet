@@ -44,22 +44,20 @@ jobs:
           composer install --no-dev --prefer-dist || echo "Skipping PHP dependencies."
           npm install || echo "Skipping JS dependencies."
 
-      # NOUVELLE ÉTAPE CORRIGÉE AVEC LES VALEURS EN DUR (HARD-CODÉES)
+      # ÉTAPE CORRIGÉE: TOUS LES PARAMÈTRES SONT DANS ARGS:
       - name: SonarCube Analysis (SAST)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         env:
-          # Le jeton (TOKEN BRUT) est inséré ici à la place du secret GitHub.
-          # C'est la solution de contournement pour le blocage des permissions.
+          # Le jeton (TOKEN BRUT) est inséré ici
           SONAR_TOKEN: 93ebf7757d605e2733d5c4f3866ae13393a476c9
         with:
-          # L'adresse de SonarCloud est collée ici
-          host_url: https://sonarcloud.io 
-          
-          # La clé de projet (KEY BRUTE) est insérée ici
-          projectKey: maxence77_projet
-          
-          # Arguments additionnels pour l'analyse (conservés de l'ancienne version)
           args: >
+            # PARAMÈTRES OBLIGATOIRES FIXÉS :
+            -Dsonar.host.url=https://sonarcloud.io 
+            -Dsonar.organization=maxence77  # NOUVEAU: Nom de l'utilisateur/Organisation GitHub
+            -Dsonar.projectKey=maxence77_projet
+            
+            # Arguments additionnels pour l'analyse (conservés)
             -Dsonar.sources=. 
             -Dsonar.exclusions=**/*.min.js,**/*.css,**/*.html,**/*.yml,**/*.md 
             
