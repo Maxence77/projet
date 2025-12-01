@@ -1,4 +1,4 @@
-# Nom du workflow qui apparaîtra dans l'onglet "Actions" de GitHub testestestestestesetsestestestetsestesestesteste
+# Nom du workflow qui apparaîtra dans l'onglet "Actions" de GitHub
 name: "DevSecOps - Pipeline Complet et Final"
 
 # --------------------------
