@@ -44,7 +44,7 @@ jobs:
           composer install --no-dev --prefer-dist || echo "Skipping PHP dependencies."
           npm install || echo "Skipping JS dependencies."
 
-      # ÉTAPE CORRIGÉE: TOUS LES PARAMÈTRES SONT DANS ARGS:
+      # ÉTAPE CORRIGÉE: ENLÈVEMENT DES LIGNES VIDES ET DES COMMENTAIRES DANS ARGS:
       - name: SonarCube Analysis (SAST)
         uses: SonarSource/sonarcloud-github-action@v2.3.0
         env:
@@ -52,12 +52,9 @@ jobs:
           SONAR_TOKEN: 93ebf7757d605e2733d5c4f3866ae13393a476c9
         with:
           args: >
-            # PARAMÈTRES OBLIGATOIRES FIXÉS :
             -Dsonar.host.url=https://sonarcloud.io 
-            -Dsonar.organization=maxence77  # NOUVEAU: Nom de l'utilisateur/Organisation GitHub
+            -Dsonar.organization=maxence77 
             -Dsonar.projectKey=maxence77_projet
-            
-            # Arguments additionnels pour l'analyse (conservés)
             -Dsonar.sources=. 
             -Dsonar.exclusions=**/*.min.js,**/*.css,**/*.html,**/*.yml,**/*.md 
             
