@@ -1,6 +1,11 @@
 <?php
-// Définit l'en-tête de la réponse comme étant du JSON
-header('Content-Type: application/json');
+// Sécurisation des en-têtes HTTP
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff'); // Empêche le navigateur de deviner le type MIME
+header('X-Frame-Options: DENY'); // Empêche le site d'être affiché dans une iframe (Clickjacking)
+header('X-XSS-Protection: 1; mode=block'); // Active le filtre XSS du navigateur
+header('Strict-Transport-Security: max-age=31536000; includeSubDomains'); // Force HTTPS
+
 // Inclut le fichier de connexion à la base de données
 require 'db.php';
 
@@ -9,11 +14,12 @@ $data = json_decode(file_get_contents("php://input"), true);
 // Récupère l'action demandée (register ou login), ou une chaîne vide si non définie
 $action = $data['action'] ?? '';
 
+// Validation des entrées : Nettoyage basique (bien que les requêtes préparées gèrent l'injection SQL)
+$username = htmlspecialchars(strip_tags($data['username'] ?? ''), ENT_QUOTES, 'UTF-8');
+$password = $data['password'] ?? ''; // Le mot de passe ne doit pas être modifié avant hachage/vérif
+
 // Si l'action est 'register' (inscription)
 if ($action === 'register') {
-    // Récupère le nom d'utilisateur et le mot de passe
-    $username = $data['username'] ?? '';
-    $password = $data['password'] ?? '';
 
     // Vérifie si les champs sont vides
     if (empty($username) || empty($password)) {

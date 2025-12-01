@@ -1,0 +1,64 @@
+name: DevSecOps Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-scan:
+    name: Security & Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Important for secret scanning history
+
+      # 1. Secret Scanning (SAST)
+      - name: Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. PHP Syntax Check (Linting)
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: PHP Syntax Checker
+        run: find ./php -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      # 3. Static Code Analysis for PHP (Simple)
+      # In a real project, use PHPStan or Psalm
+      # - name: PHPStan
+      #   uses: phpstan/phpstan-action@v1
+
+      # 4. JavaScript Linting (ESLint)
+      # Requires package.json, creating a temporary one if missing
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install ESLint
+        run: |
+          if [ ! -f package.json ]; then
+            npm init -y
+          fi
+          npm install eslint --save-dev
+          npx eslint --init --force || true # Initialize if needed, or just run
+
+      - name: Run ESLint
+        run: npx eslint js/ --no-error-on-unmatched-pattern || echo "ESLint found issues or no config"
+
+      # 5. Dependency Vulnerability Scan (SCA) - Example for Composer/NPM
+      # - name: Audit PHP dependencies
+      #   run: composer audit || true
+      
+      # - name: Audit NPM dependencies
+      #   run: npm audit || true
+
